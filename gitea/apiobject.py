@@ -114,7 +114,8 @@ class Organization(ApiObject):
         for team in teams:
             if team.name == name:
                 return team
-        raise NotFoundException("Team not existent in organization.")
+        # raise NotFoundException("Team not existent in organization.")
+        return None
 
     def get_members(self) -> List["User"]:
         results = self.gitea.requests_get(Organization.ORG_GET_MEMBERS % self.username)

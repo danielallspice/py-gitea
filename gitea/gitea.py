@@ -317,6 +317,16 @@ class Gitea:
                     "repo.releases",
                     "repo.ext_wiki",
             ),
+            units_map={
+                "repo.code": "write",
+                "repo.ext_issues": "write",
+                "repo.ext_wiki": "write",
+                "repo.issues": "read",
+                "repo.projects": "write",
+                "repo.pulls": "write",
+                "repo.releases": "write",
+                "repo.wiki": "write"
+            }
     ):
         """ Creates a Team.
 
@@ -335,8 +345,10 @@ class Gitea:
                 "can_create_org_repo": can_create_org_repo,
                 "includes_all_repositories": includes_all_repositories,
                 "units": units,
+                "units_map": units_map
             },
         )
+        
         if "id" in result:
             self.logger.info("Successfully created Team %s" % result["name"])
         else:

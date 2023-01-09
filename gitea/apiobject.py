@@ -388,9 +388,9 @@ class Repository(ApiObject):
         )
         return Branch.parse_response(self.gitea, result)
 
-    def get_issues(self) -> List["Issue"]:
+    def get_issues(self, type="all") -> List["Issue"]:
         """Get all Issues of this Repository (open and closed)"""
-        return self.get_issues_state(Issue.OPENED) + self.get_issues_state(Issue.CLOSED)
+        return self.get_issues_state(Issue.OPENED, type) + self.get_issues_state(Issue.CLOSED, type)
 
     def get_commits(self, sha='main') -> List["Commit"]:
         """Get all the Commits of this Repository."""
@@ -408,11 +408,11 @@ class Repository(ApiObject):
             results = []
         return [Commit.parse_response(self.gitea, result) for result in results]
 
-    def get_issues_state(self, state) -> List["Issue"]:
+    def get_issues_state(self, state, type="all") -> List["Issue"]:
         """Get issues of state Issue.open or Issue.closed of a repository."""
         assert state in [Issue.OPENED, Issue.CLOSED]
         issues = []
-        data = {"state": state}
+        data = {"state": state, "type": type}
         results = self.gitea.requests_get_paginated(
             Repository.REPO_ISSUES.format(owner=self.owner.username, repo=self.name), params=data
         )
